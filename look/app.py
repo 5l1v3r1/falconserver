@@ -1,7 +1,8 @@
-import falcon
+import falcon.asgi
 
 from look.session import init_session
 from look.api import user
+from look.api.compile import python
 from look.middleware.jsontranslator import JSONTranslator
 from look.middleware.sessionmanager import SessionManager
 
@@ -10,7 +11,7 @@ middleware = [
     SessionManager(init_session())
 ]
 
-api = application = falcon.API(middleware=middleware)
+api = application = falcon.asgi.App(middleware=middleware)
 
 class Test(object):
     def on_get(self, req, res):
@@ -19,3 +20,5 @@ class Test(object):
 api.add_route('/', Test())
 api.add_route('/api/user', user.Collection())
 api.add_route('/api/user/{id}', user.Item())
+
+api.add_route('/api/compile/python', python.Compile_Python())
