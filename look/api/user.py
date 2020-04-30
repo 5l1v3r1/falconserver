@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 from look.model.user import User as UserModel
 
 class Collection(object):
-    def on_post(self, req, res):
+    async def on_post(self, req, res):
         user_data = req.context['data']
         session = req.context['db_session']
         print(user_data)
@@ -38,7 +38,7 @@ class Collection(object):
                 "data" : "",
             })
     
-    def on_get(self, req, res):
+    async def on_get(self, req, res):
         session = req.context['db_session']
         user_dbs = session.query(UserModel).all()
         if user_dbs:
@@ -50,7 +50,7 @@ class Collection(object):
             })
 
 class Item(object):
-    def on_get(self, req, res, id):
+    async def on_get(self, req, res, id):
         session = req.context['db_session']
         user_dbs = session.query(UserModel).filter(UserModel.id == id).first()
         if user_dbs:

@@ -1,24 +1,36 @@
 import falcon.asgi
+import subprocess
+import socketio
+import pty
+import select
+import os
+import sys
+import signal
 
 from look.session import init_session
+from look.socket import TerminalNamespace, init_socket
 from look.api import user
 from look.api.compile import python
 from look.middleware.jsontranslator import JSONTranslator
 from look.middleware.sessionmanager import SessionManager
+# from look.middleware.socketmanager import SocketManager
 
 middleware = [
     JSONTranslator(),
-    SessionManager(init_session())
+    SessionManager(init_session()),
 ]
 
-api = application = falcon.asgi.App(middleware=middleware)
+app = application = falcon.asgi.App(middleware=middleware)
+socket, sio = init_socket(app)
+sio.register_namespace(TerminalNamespace('/', sio))
+# app.add_middleware(SocketManager(sio))
 
 class Test(object):
-    def on_get(self, req, res):
+    async def on_get(self, req, res):
         res.body = "Hello, World!"
 
-api.add_route('/', Test())
-api.add_route('/api/user', user.Collection())
-api.add_route('/api/user/{id}', user.Item())
+app.add_route('/', Test())
+app.add_route('/api/user', user.Collection())
+app.add_route('/api/user/{id}', user.Item())
 
-api.add_route('/api/compile/python', python.Compile_Python())
+app.add_route('/api/compile/python', python.Compile_Python())

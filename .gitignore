@@ -18,3 +18,5 @@ doc/*.txt
 doc/**/*.pdf
 
 .venv/
+
+**/__pycache__

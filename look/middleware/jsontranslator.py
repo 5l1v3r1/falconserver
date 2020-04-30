@@ -2,10 +2,10 @@ import json
 import falcon
 
 class JSONTranslator(object):
-    def process_request(self, req, res):
+    async def process_request(self, req, res):
         if req.content_type == 'application/json':
             try:
-                raw_json = req.stream.read()
+                raw_json = await req.stream.read()
             except Exception:
                 message = 'Read Error'
                 raise falcon('Bad request', message)

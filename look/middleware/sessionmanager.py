@@ -2,12 +2,12 @@ class SessionManager:
     def __init__(self, Session):
         self.db_session = Session
 
-    def process_resource(self, req, resp, resource, params):
+    async def process_resource(self, req, resp, resource, params):
         if req.method == 'OPTIONS':
             return
         req.context['db_session'] = self.db_session()
         
-    def process_response(self, req, resp, resource, req_succeeded):
+    async def process_response(self, req, resp, resource, req_succeeded):
         if req.method == 'OPTIONS':
             return
         if req.context.get('db_session'):
