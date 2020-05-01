@@ -100,10 +100,3 @@ def init_socket(app):
     socket = socketio.ASGIApp(sio, app)
 
     return (socket, sio)
-
-# class Socket(socketio.AsyncNamespace):
-#     def __init__(self, app):
-#         print("init_socket")
-
-#         self.sio = socketio.AsyncServer(async_mode='asgi')
-#         self.socket = socketio.ASGIApp(self.sio, app)

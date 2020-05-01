@@ -1,5 +1,5 @@
 import json
-import falcon
+from falcon import HTTP_400, HTTP_200
 
 from sqlalchemy.exc import IntegrityError
 
@@ -17,21 +17,21 @@ class Collection(object):
                 session.commit()
             except IntegrityError:
                 session.rollback()
-                res.status = falcon.HTTP_400
+                res.status = HTTP_400
                 res.body = json.dumps({
                     "result" : "ERROR",
                     "description" : "DUPLICATE EMAIL",
                     "data" : "",
                 })
             else:
-                res.status = falcon.HTTP_200
+                res.status = HTTP_200
                 res.body = json.dumps({
                     "result" : "OK",
                     "description" : "",
                     "data" : "",
                 })
         else:
-            res.status = falcon.HTTP_400
+            res.status = HTTP_400
             res.body = json.dumps({
                 "result" : "ERROR",
                 "description" : "INVALID PARAMETER",
@@ -42,7 +42,7 @@ class Collection(object):
         session = req.context['db_session']
         user_dbs = session.query(UserModel).all()
         if user_dbs:
-            res.status = falcon.HTTP_200
+            res.status = HTTP_200
             res.body = json.dumps({
                 'result' : 'OK',
                 'description' : '',
@@ -54,7 +54,7 @@ class Item(object):
         session = req.context['db_session']
         user_dbs = session.query(UserModel).filter(UserModel.id == id).first()
         if user_dbs:
-            res.status = falcon.HTTP_200
+            res.status = HTTP_200
             res.body = json.dumps({
                 'result' : 'OK',
                 'description' : '',
