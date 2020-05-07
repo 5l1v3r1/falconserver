@@ -8,15 +8,15 @@ from look.model.user import User as UserModel
 class Collection(object):
     async def on_post(self, req, res):
         user_data = req.context['data']
-        session = req.context['db_session']
+        db_session = req.context['db_session']
         print(user_data)
         if user_data and ("email" in user_data) and ("name" in user_data) and ("password" in user_data):
-            session.add(UserModel(email=user_data['email'], name=user_data['name'], password=user_data['password']))
+            db_session.add(UserModel(email=user_data['email'], name=user_data['name'], password=user_data['password']))
 
             try:
-                session.commit()
+                db_session.commit()
             except IntegrityError:
-                session.rollback()
+                db_session.rollback()
                 res.status = HTTP_400
                 res.body = json.dumps({
                     "result" : "ERROR",
@@ -39,8 +39,8 @@ class Collection(object):
             })
     
     async def on_get(self, req, res):
-        session = req.context['db_session']
-        user_dbs = session.query(UserModel).all()
+        db_session = req.context['db_session']
+        user_dbs = db_session.query(UserModel).all()
         if user_dbs:
             res.status = HTTP_200
             res.body = json.dumps({
@@ -51,8 +51,8 @@ class Collection(object):
 
 class Item(object):
     async def on_get(self, req, res, id):
-        session = req.context['db_session']
-        user_dbs = session.query(UserModel).filter(UserModel.id == id).first()
+        db_session = req.context['db_session']
+        user_dbs = db_session.query(UserModel).filter(UserModel.id == id).first()
         if user_dbs:
             res.status = HTTP_200
             res.body = json.dumps({
