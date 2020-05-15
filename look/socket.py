@@ -82,7 +82,7 @@ class TerminalNamespace(socketio.AsyncNamespace):
         await self.wait_for_idle(sid, self.compile_code, sid=sid, data=data)
 
     
-    async def on_create_terminal(self, sid, data):
+    async def on_create_terminal(self, sid):
         session = await self.sio.get_session(sid)
 
         if session:

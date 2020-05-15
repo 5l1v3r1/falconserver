@@ -1,8 +1,7 @@
-from look.model.user import User
+from look.model.board import Board
 from look.api.base import BaseCollection, BaseItem
 
-# args = (User,)
-args = (User, 'id', 'username', 'email', 'exp', 'user_img', 'learning_progress')
+args = (Board,)
 
 class Collection(BaseCollection):
     def __init__(self):
